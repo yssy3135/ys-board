@@ -8,6 +8,7 @@ import ys.board.article.entity.Article;
 import ys.board.article.repository.ArticleRepository;
 import ys.board.article.service.request.ArticleCreateRequest;
 import ys.board.article.service.request.ArticleUpdateRequest;
+import ys.board.article.service.response.ArticlePageResponse;
 import ys.board.article.service.response.ArticleResponse;
 
 @Service
@@ -44,5 +45,16 @@ public class ArticleService {
         articleRepository.deleteById(articleId);
     }
 
+    public ArticlePageResponse readAll(Long boardId, Long page, Long pageSize) {
+        return ArticlePageResponse.of(
+                articleRepository.findAll(boardId, (page - 1) * pageSize, pageSize).stream()
+                        .map(ArticleResponse::from)
+                        .toList(),
+                articleRepository.count(
+                        boardId,
+                        PageLimitCalculator.calculatePageLimit(page, pageSize, 10L)
+                )
+        );
+    }
 
 }
