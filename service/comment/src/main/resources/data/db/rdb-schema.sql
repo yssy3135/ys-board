@@ -22,6 +22,7 @@ create table comment_v2 (
 
 create unique index idx_article_id_path on comment_v2(article_id asc, path asc);
 
+
 create table article_comment_count (
     article_id bigint not null primary key,
     comment_count bigint not null
