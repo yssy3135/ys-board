@@ -1,7 +1,7 @@
 package ys.board.comment.controller;
 
-import ys.board.comment.service.CommentService;
-import ys.board.comment.service.request.CommentCreateRequest;
+import ys.board.comment.service.CommentServiceV2;
+import ys.board.comment.service.request.CommentCreateRequestV2;
 import ys.board.comment.service.response.CommentPageResponse;
 import ys.board.comment.service.response.CommentResponse;
 import lombok.RequiredArgsConstructor;
@@ -11,27 +11,27 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class CommentController {
-    private final CommentService commentService;
+public class CommentControllerV2 {
+    private final CommentServiceV2 commentService;
 
-    @GetMapping("/v1/comments/{commentId}")
+    @GetMapping("/v2/comments/{commentId}")
     public CommentResponse read(
             @PathVariable("commentId") Long commentId
     ) {
         return commentService.read(commentId);
     }
 
-    @PostMapping("/v1/comments")
-    public CommentResponse create(@RequestBody CommentCreateRequest request) {
+    @PostMapping("/v2/comments")
+    public CommentResponse create(@RequestBody CommentCreateRequestV2 request) {
         return commentService.create(request);
     }
 
-    @DeleteMapping("/v1/comments/{commentId}")
+    @DeleteMapping("/v2/comments/{commentId}")
     public void delete(@PathVariable("commentId") Long commentId) {
         commentService.delete(commentId);
     }
 
-    @GetMapping("/v1/comments")
+    @GetMapping("/v2/comments")
     public CommentPageResponse readAll(
             @RequestParam("articleId") Long articleId,
             @RequestParam("page") Long page,
@@ -40,14 +40,13 @@ public class CommentController {
         return commentService.readAll(articleId, page, pageSize);
     }
 
-    @GetMapping("/v1/comments/infinite-scroll")
-    public List<CommentResponse> readAll(
+    @GetMapping("/v2/comments/infinite-scroll")
+    public List<CommentResponse> readAllInfiniteScroll(
             @RequestParam("articleId") Long articleId,
-            @RequestParam(value = "lastParentCommentId", required = false) Long lastParentCommentId,
-            @RequestParam(value = "lastCommentId", required = false) Long lastCommentId,
+            @RequestParam(value = "lastPath", required = false) String lastPath,
             @RequestParam("pageSize") Long pageSize
     ) {
-        return commentService.readAll(articleId, lastParentCommentId, lastCommentId, pageSize);
+        return commentService.readAllInfiniteScroll(articleId, lastPath, pageSize);
     }
 
 }
