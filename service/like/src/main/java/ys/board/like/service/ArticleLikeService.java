@@ -1,6 +1,6 @@
 package ys.board.like.service;
 
-import kuke.board.common.snowflake.Snowflake;
+import ys.board.common.snowflake.Snowflake;
 import ys.board.like.entity.ArticleLike;
 import ys.board.like.entity.ArticleLikeCount;
 import ys.board.like.repository.ArticleLikeCountRepository;

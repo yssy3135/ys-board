@@ -9,7 +9,7 @@ import ys.board.comment.service.request.CommentCreateRequestV2;
 import ys.board.comment.service.response.CommentPageResponse;
 import ys.board.comment.service.response.CommentResponse;
 
-import kuke.board.common.snowflake.Snowflake;
+import ys.board.common.snowflake.Snowflake;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
