@@ -32,10 +32,10 @@ public enum EventType {
 
 
     public static class Topic {
-        private static final String YS_BOARD_ARTICLE = "ys-board-article";
-        private static final String YS_BOARD_COMMENT = "ys-board-comment";
-        private static final String YS_BOARD_LIKE = "ys-board-like";
-        private static final String YS_BOARD_VIEW = "ys-board-view";
+        public static final String YS_BOARD_ARTICLE = "ys-board-article";
+        public static final String YS_BOARD_COMMENT = "ys-board-comment";
+        public static final String YS_BOARD_LIKE = "ys-board-like";
+        public static final String YS_BOARD_VIEW = "ys-board-view";
     }
 
 
