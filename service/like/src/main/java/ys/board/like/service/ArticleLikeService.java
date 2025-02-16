@@ -1,5 +1,9 @@
 package ys.board.like.service;
 
+import ys.board.common.event.EventType;
+import ys.board.common.event.payload.ArticleLikedEventPayload;
+import ys.board.common.event.payload.ArticleUnlikedEventPayload;
+import ys.board.common.outboxmessagerelay.OutboxEventPublisher;
 import ys.board.common.snowflake.Snowflake;
 import ys.board.like.entity.ArticleLike;
 import ys.board.like.entity.ArticleLikeCount;
@@ -16,6 +20,7 @@ public class ArticleLikeService {
     private final Snowflake snowflake = new Snowflake();
     private final ArticleLikeRepository articleLikeRepository;
     private final ArticleLikeCountRepository articleLikeCountRepository;
+    private final OutboxEventPublisher outboxEventPublisher;
 
     public ArticleLikeResponse read(Long articleId, Long userId) {
         return articleLikeRepository.findByArticleIdAndUserId(articleId, userId)
@@ -45,7 +50,17 @@ public class ArticleLikeService {
             );
         }
 
-
+        outboxEventPublisher.publish(
+                EventType.ARTICLE_LIKED,
+                ArticleLikedEventPayload.builder()
+                        .articleId(articleId)
+                        .articleLikeId(articleLike.getArticleLikeId())
+                        .articleLikeCount(count(articleId))
+                        .createdAt(articleLike.getCreatedAt())
+                        .userId(userId)
+                        .build(),
+                articleId
+        );
     }
 
     @Transactional
@@ -54,6 +69,19 @@ public class ArticleLikeService {
                 .ifPresent(articleLike -> {
                     articleLikeRepository.delete(articleLike);
                     articleLikeCountRepository.decrease(articleId);
+
+                    outboxEventPublisher.publish(
+                            EventType.ARTICLE_UNLIKED,
+                            ArticleUnlikedEventPayload.builder()
+                                    .articleId(articleId)
+                                    .articleLikeId(articleLike.getArticleLikeId())
+                                    .articleLikeCount(count(articleId))
+                                    .createdAt(articleLike.getCreatedAt())
+                                    .userId(userId)
+                                    .build(),
+                            articleId
+                    );
+
                 });
     }
 

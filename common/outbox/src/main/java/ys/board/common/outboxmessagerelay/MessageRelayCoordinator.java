@@ -36,7 +36,7 @@ public class MessageRelayCoordinator {
         return "message-relay::coordinator::app-list::%s".formatted(applicationName);
     }
 
-    private AssignedShard assignedShards() {
+    public AssignedShard assignShards() {
         // redis 에서 app list 전체 조회
         return AssignedShard.of(APP_ID, findAppIds(), MessageRelayConstants.SHARD_COUNT);
     }

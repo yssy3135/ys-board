@@ -21,21 +21,21 @@ public class Outbox {
     @Enumerated(EnumType.STRING)
     private EventType eventType;
     private String payload;
-    private Long sharedKey;
-    private LocalDateTime createAt;
+    private Long shardKey;
+    private LocalDateTime createdAt;
 
     public static Outbox create(
             Long outboxId,
             EventType eventType,
             String payload,
-            Long sharedKey
+            Long shardKey
     ) {
         Outbox outbox = new Outbox();
         outbox.outboxId = outboxId;
         outbox.eventType = eventType;
         outbox.payload = payload;
-        outbox.sharedKey = sharedKey;
-        outbox.createAt = LocalDateTime.now();
+        outbox.shardKey = shardKey;
+        outbox.createdAt = LocalDateTime.now();
 
         return outbox;
     }

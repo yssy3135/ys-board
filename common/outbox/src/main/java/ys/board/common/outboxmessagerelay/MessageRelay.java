@@ -7,15 +7,12 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 @Slf4j
 @Component
@@ -42,16 +39,17 @@ public class MessageRelay {
         publishEvent(outboxEvent.getOutbox());
     }
 
-    @Transactional()
+
     public void publishEvent(Outbox outbox) {
 
         try {
             // 메시지 publish 1초동안 대기
             messageKafkaTemplate.send(
                     outbox.getEventType().getTopic(),
-                    String.valueOf(outbox.getSharedKey()),
+                    String.valueOf(outbox.getShardKey()),
                     outbox.getPayload()
             ).get(1, TimeUnit.SECONDS);
+            outboxRepository.delete(outbox);
         } catch (Exception e) {
             log.error("[MessageRelay.publishEvent] outbox={}", outbox, e);
         }
@@ -66,7 +64,7 @@ public class MessageRelay {
             scheduler = "messageRelayPublishPendingEventExecutor"
     )
     public void publishPendingEvent() {
-        AssignedShard assignedShard = messageRelayCoordinator.assignedShards();
+        AssignedShard assignedShard = messageRelayCoordinator.assignShards();
         log.info("[MessageRelay.publishPendingEvent] assignedShard size={}", assignedShard.getShards().size());
         for(Long shard : assignedShard.getShards())  {
             List<Outbox> outboxes = outboxRepository.findAllByShardKeyAndCreatedAtLessThanEqualOrderByCreatedAtAsc(
