@@ -3,6 +3,7 @@ package ys.board.articleread.sevice;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import ys.board.articleread.client.ArticleClient;
 import ys.board.articleread.client.CommentClient;
 import ys.board.articleread.client.LikeClient;

@@ -20,7 +20,7 @@ endpoints:
     url: http://localhost:9001
   ys-board-like-service:
     url: http://localhost:9002
-  ys-board-vview-service:
+  ys-board-view-service:
     url: http://localhost:9003
 
 
