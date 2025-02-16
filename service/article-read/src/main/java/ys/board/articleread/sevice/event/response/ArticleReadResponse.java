@@ -1,9 +1,13 @@
 package ys.board.articleread.sevice.event.response;
 
+import lombok.Getter;
+import lombok.ToString;
 import ys.board.articleread.repository.ArticleQueryModel;
 
 import java.time.LocalDateTime;
 
+@Getter
+@ToString
 public class ArticleReadResponse {
     private Long articleId;
     private String title;

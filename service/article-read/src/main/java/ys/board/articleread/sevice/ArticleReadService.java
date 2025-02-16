@@ -4,6 +4,7 @@ package ys.board.articleread.sevice;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Component;
 import ys.board.articleread.client.ArticleClient;
 import ys.board.articleread.client.CommentClient;
 import ys.board.articleread.client.LikeClient;
@@ -20,6 +21,7 @@ import java.util.Optional;
 
 
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class ArticleReadService {
     private final ArticleClient articleClient;
